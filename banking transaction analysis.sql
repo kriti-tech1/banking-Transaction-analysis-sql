@@ -86,10 +86,10 @@ SELECT * FROM transactions;
 - Window Functions
 - RANK()
 - LAG()
-- Running Totals  */ 
+- Running Totals  
 
 
-
+              ** ADVANCE QUERIES **       /*
 
 --q1)Find customers who have made more than 1 transaction.
 WITH transaction_cte AS (
@@ -171,7 +171,7 @@ ON a.customer_id = c.customer_id ;
 
 
 
---****q5)Find customers who have made both a Deposit and a Withdrawal transaction.
+--q5)Find customers who have made both a Deposit and a Withdrawal transaction.
 WITH trans_cte AS (
        SELECT 
 	   		account_id 
@@ -193,6 +193,7 @@ JOIN
     trans_cte tc
 ON tc.account_id=a.account_id ;
 
+
 --q6)Find the customer with the 2nd highest account balance.
 WITH rank_cte AS (
    SELECT
@@ -211,6 +212,7 @@ JOIN
     rank_cte rc
 ON rc.customer_id =c.customer_id 
 WHERE ranking=2;
+
 
 --q7)Find the customer who has performed the highest number of transactions.
 WITH trans_cte AS (
@@ -235,9 +237,10 @@ JOIN
 ON tc.account_id = a.account_id
 WHERE ranking=1;
  ;
-/* ORDER BY total_transaction DESC (because it is not so accurate what if there is more than 1 customer 
+/* ORDER BY total_transaction DESC 
+    LIMIT 1 ;(because it is not so accurate what if there is more than 1 customer 
 who has performed the highest no. of transaction)
- LIMIT 1 ;*/
+ */
 
 
 /*q8) For each customer, show:
@@ -333,6 +336,7 @@ WHERE a.balance >(
 	WHERE c.customer_name ='Rahul'
 );
 
+
 --q10)Show each transaction along with the previous transaction amount for the same account.
 SELECT 
 		a.account_id,
@@ -391,6 +395,7 @@ JOIN
 ON ac.customer_id = c.customer_id 
 WHERE a.balance>avg_balance;
 
+
 --q12)Show the running total of transactions for each account ordered by transaction date.
 SELECT 
 		    account_id, 
@@ -399,8 +404,8 @@ SELECT
 			SUM(amount) OVER (PARTITION BY account_id ORDER BY transaction_date) AS running_total
 		FROM 
 			transactions 
+	
 
--- DAY 7 --
 --q13)Show the next transaction amount for each account using LEAD().
 SELECT 
  		account_id ,
@@ -409,6 +414,7 @@ SELECT
 		LEAD(amount) OVER (PARTITION BY account_id ORDER BY transaction_date) AS next_amount
 FROM
 		transactions ;
+
 
 --q14)Find the top 2 customers with the highest total deposit amount.
 WITH trans_cte AS(
@@ -443,6 +449,7 @@ SELECT
 		ROW_NUMBER () OVER (PARTITION BY account_id ORDER BY transaction_date ASC) AS transaction_number 
 FROM 
 		transactions 
+	
 
 --q16)Find the total transaction amount for each month.
 SELECT 
@@ -588,6 +595,7 @@ FROM
 	customers 
 WHERE customer_name LIKE 'R%' 
 OR customer_name LIKE '%a';
+
 	  
 --q24)Find the number of distinct transaction types performed by each customer.
 WITH trans_cte AS(
